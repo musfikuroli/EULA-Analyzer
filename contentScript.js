@@ -1,44 +1,44 @@
-let jsonData = {};
+// let jsonData = {};
 
-// let jsonData = {
-//   warnings: [
-//     {
-//       warning_number: 1,
-//       category: "Online Services",
-//       icon_tag: "third-party-services",
-//       description:
-//         "This Product requires an internet connection and may have online services and features that collect and store data about you. Make sure to review the privacy policy for more information on how your data is used and protected.",
-//     },
-//     {
-//       warning_number: 2,
-//       category: "Data Collection",
-//       icon_tag: "data-collection",
-//       description:
-//         "Ubisoft may collect and store data about you in relation to your use of the Product, such as your connection information and compatible device data. Your privacy is important to Ubisoft, but be cautious and review their privacy policy to understand how your data is handled.",
-//     },
-//     {
-//       warning_number: 3,
-//       category: "Third-party Analytics",
-//       icon_tag: "data-usage-analytics",
-//       description:
-//         "Ubisoft uses third-party analytics tools to collect information about your gaming habits and use of the Product. This may include personal data such as your device identifiers and settings, game scores, and feature usage. Make sure you review their privacy policy for more details.",
-//     },
-//     {
-//       warning_number: 4,
-//       category: "Targeted Advertising",
-//       icon_tag: "behavioral-advertising",
-//       description:
-//         "The Product may display advertisements and collect information for targeted advertising purposes. This may include data such as your age, gender, and the ads you interact with. Read Ubisoft's privacy policy to understand how this information is used and how to opt-out.",
-//     },
-//     {
-//       warning_number: 5,
-//       category: "Unauthorized Program Detection",
-//       icon_tag: "access-control",
-//       description:
-//         "The Product may monitor your hardware for unauthorized third-party programs. If detected, information about the program and your account may be sent to Ubisoft. Your access to the Product may be terminated based on the detection results.",
-//     },
-//   ],
-// };
+let jsonData = {
+  warnings: [
+    {
+      warning_number: 1,
+      category: "Online Services",
+      icon_tag: "missing-oli",
+      description:
+        "This Product requires an internet connection and may have online services and features that collect and store data about you. Make sure to review the privacy policy for more information on how your data is used and protected.",
+    },
+    {
+      warning_number: 2,
+      category: "Data Collection",
+      icon_tag: "data-collection",
+      description:
+        "Ubisoft may collect and store data about you in relation to your use of the Product, such as your connection information and compatible device data. Your privacy is important to Ubisoft, but be cautious and review their privacy policy to understand how your data is handled.",
+    },
+    {
+      warning_number: 3,
+      category: "Third-party Analytics",
+      icon_tag: "data-usage-analytics",
+      description:
+        "Ubisoft uses third-party analytics tools to collect information about your gaming habits and use of the Product. This may include personal data such as your device identifiers and settings, game scores, and feature usage. Make sure you review their privacy policy for more details.",
+    },
+    {
+      warning_number: 4,
+      category: "Targeted Advertising",
+      icon_tag: "behavioral-advertising",
+      description:
+        "The Product may display advertisements and collect information for targeted advertising purposes. This may include data such as your age, gender, and the ads you interact with. Read Ubisoft's privacy policy to understand how this information is used and how to opt-out.",
+    },
+    {
+      warning_number: 5,
+      category: "Unauthorized Program Detection",
+      icon_tag: "access-control",
+      description:
+        "The Product may monitor your hardware for unauthorized third-party programs. If detected, information about the program and your account may be sent to Ubisoft. Your access to the Product may be terminated based on the detection results.",
+    },
+  ],
+};
 
 //#####---Function to Extract All Text Content from The Page---#####--------------------------------------------------------------------
 function extractAllText() {
@@ -71,12 +71,12 @@ function extractAllText() {
   // Combine all collected visible text into a single string
   return allText.join(" ");
 }
-//---------------------------------------------------Ending---of---Function-----------------------------------------------------------
+//---------------------------------------------------Ending---of---Function---------------------------------------------------------------------------
 //
 //
 //
 //
-//#####---Function to Fetch and Parse The Privacy Sensitive Words List File [Hard-Coded]---#####--------------------------------------
+//#####---Function to Fetch and Parse The Privacy Sensitive Words List File [Hard-Coded]---#####------------------------------------------------------
 async function fetchWordList() {
   try {
     // Hardcoded wordlist
@@ -204,15 +204,20 @@ async function fetchWordList() {
     return [];
   }
 }
+//---------------------------------------------------Ending---of---Function----------------------------------------------------------------------------
 //
 //
-// Function to send a message to the popup with jsonData
+//
+//#####---Function to send a message to the popup with jsonData---#####--------------------------------------------------------------------------------
 function sendMessageToPopup(data) {
   // console.log("Sending data to popup:", data);
   chrome.runtime.sendMessage({ message: "show_data", data: data });
 }
+//---------------------------------------------------Ending---of---Function----------------------------------------------------------------------------
 //
-// Calling The Cloud Function
+//
+//
+//#####---Calling The Cloud Function---#####-----------------------------------------------------------------------------------------------------------
 function callCloudFunction(allPageText) {
   console.log("Function Called...\n");
   const cloudFunctionUrl =
@@ -223,18 +228,13 @@ function callCloudFunction(allPageText) {
     headers: {
       "Content-Type": "text/plain",
     },
-    // body: "It is a security sentence. My Name is OLI.",
     body: allPageText, // Send the plaintext directly
-    // body: JSON.stringify({
-    //   userMessage: userOliMessage,
-    // }),
   })
     .then((response) => {
       // Check if the response status is OK (200)
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
-
       // Read the response text
       return response.text();
     })
@@ -254,13 +254,22 @@ function callCloudFunction(allPageText) {
       throw error; // rethrow the error for handling elsewhere if needed
     });
 }
-
+//---------------------------------------------------Ending---of---Function----------------------------------------------------------------------------
+//
+//
+//
 // Define a callback function to be called when highlighting is complete
 function highlightingCallback() {
   // Send a message to the popup after highlighting is complete
-  sendMessageToPopup(jsonData);
+  setTimeout(function () {
+    sendMessageToPopup(jsonData);
+  }, 10);
+  // sendMessageToPopup(jsonData);
 }
-
+//
+//
+//
+//
 //#####---Function for Highlighting The Privacy Sensitive Words---#####---------------------------------------------------------------
 async function highlightWords() {
   const predefinedWords = await fetchWordList();
@@ -286,13 +295,13 @@ async function highlightWords() {
     }
   });
 
-  try {
-    // Call the Cloud Function and wait for the response
-    await callCloudFunction(allPageText);
-  } catch (error) {
-    // Handle errors
-    console.error("Error processing data:", error);
-  }
+  // try {
+  //   // Call the Cloud Function and wait for the response
+  //   await callCloudFunction(allPageText);
+  // } catch (error) {
+  //   // Handle errors
+  //   console.error("Error processing data:", error);
+  // }
 }
 //---------------------------------------------------Ending---of---Function-----------------------------------------------------------
 //
