@@ -1,22 +1,44 @@
-// let privacyParagraph =
-//   "PLEASE READ THIS END USER LICENCE AGREEMENT CAREFULLY. 1.1 UBISOFT (or its licensors) grants You a non-exclusive, non-transferable, non-sublicensed, non-commercial and personal license to install and/or use the Product (in whole or in part) and any Product, for such time until either You or UBISOFT terminates this EULA. You must in no event use, nor allow others to use,the Product or this License for commercial purposes without obtaining a licence to do so from UBISOFT. Updates, upgrades, patches and modifications may be necessary in order to be able to continue to use the Product on certain hardware. THIS PRODUCT IS LICENSED TO YOU, NOT SOLD.";
-// let jsonData = {};
-let privacyParagraph = "";
+let jsonData = {};
 
-let jsonData = {
-  warnings: [
-    {
-      warning_code: 1,
-      category: "Location",
-      description: "This application tracks location.",
-    },
-    {
-      warning_code: 2,
-      category: "Personal Data Access",
-      description: "Will have access to personal data - Image, SMS etc.",
-    },
-  ],
-};
+// let jsonData = {
+//   warnings: [
+//     {
+//       warning_number: 1,
+//       category: "Online Services",
+//       icon_tag: "third-party-services",
+//       description:
+//         "This Product requires an internet connection and may have online services and features that collect and store data about you. Make sure to review the privacy policy for more information on how your data is used and protected.",
+//     },
+//     {
+//       warning_number: 2,
+//       category: "Data Collection",
+//       icon_tag: "data-collection",
+//       description:
+//         "Ubisoft may collect and store data about you in relation to your use of the Product, such as your connection information and compatible device data. Your privacy is important to Ubisoft, but be cautious and review their privacy policy to understand how your data is handled.",
+//     },
+//     {
+//       warning_number: 3,
+//       category: "Third-party Analytics",
+//       icon_tag: "data-usage-analytics",
+//       description:
+//         "Ubisoft uses third-party analytics tools to collect information about your gaming habits and use of the Product. This may include personal data such as your device identifiers and settings, game scores, and feature usage. Make sure you review their privacy policy for more details.",
+//     },
+//     {
+//       warning_number: 4,
+//       category: "Targeted Advertising",
+//       icon_tag: "behavioral-advertising",
+//       description:
+//         "The Product may display advertisements and collect information for targeted advertising purposes. This may include data such as your age, gender, and the ads you interact with. Read Ubisoft's privacy policy to understand how this information is used and how to opt-out.",
+//     },
+//     {
+//       warning_number: 5,
+//       category: "Unauthorized Program Detection",
+//       icon_tag: "access-control",
+//       description:
+//         "The Product may monitor your hardware for unauthorized third-party programs. If detected, information about the program and your account may be sent to Ubisoft. Your access to the Product may be terminated based on the detection results.",
+//     },
+//   ],
+// };
 
 //#####---Function to Extract All Text Content from The Page---#####--------------------------------------------------------------------
 function extractAllText() {
@@ -51,67 +73,6 @@ function extractAllText() {
 }
 //---------------------------------------------------Ending---of---Function-----------------------------------------------------------
 //
-//
-//
-//
-//
-//
-// //#####---Extracting The Sentences that Only Contains The Privacy Sensitive Words---#####---------------------------------------------
-// import nlp from "compromise"; // Importing The "Compromise NLP Library"; Duplicate Sentences
-
-// function extractSentencesWithPrivacyWords(allPageText, predefinedWords) {
-//   // Split the text into sentences using the Compromise library.
-//   const sentences = nlp(allPageText).sentences().out("array");
-
-//   // Initialize an array to store sentences containing privacy-sensitive words.
-//   const privacySentences = [];
-
-//   // Iterate through each sentence.
-//   for (const sentence of sentences) {
-//     for (const currentWord of predefinedWords) {
-//       // Check if the sentence contains any of the predefined words using the match function.
-//       if (nlp(sentence).match(currentWord).found) {
-//         // If it does, add it to the privacySentences array.
-//         // console.log(sentence + "\n");
-//         privacySentences.push(sentence);
-//       }
-//     }
-//   }
-
-//   // Join the privacySentences into a single paragraph.
-//   const paragraph = privacySentences.join("\n\n");
-
-//   return paragraph;
-// }
-//
-//
-//
-//#####---Extracting The Sentences that Only Contains The Privacy Sensitive Words---#####---------------------------------------------
-import nlp from "compromise"; // Unique Sentences
-
-function extractSentencesWithPrivacyWords(allPageText, predefinedWords) {
-  const sentences = nlp(allPageText).sentences().out("array");
-  const uniquePrivacySentences = new Set();
-
-  for (const sentence of sentences) {
-    for (const currentWord of predefinedWords) {
-      if (nlp(sentence).match(currentWord).found) {
-        // Add the sentence to the Set to ensure uniqueness.
-        uniquePrivacySentences.add(sentence);
-        break; // Break out of the inner loop once a match is found in the sentence.
-      }
-    }
-  }
-
-  // Convert the Set to an array and join into a single paragraph.
-  const paragraph = Array.from(uniquePrivacySentences).join("\n\n");
-
-  // console.log(paragraph);
-
-  return paragraph;
-}
-
-//---------------------------------------------------Ending---of---Function-----------------------------------------------------------
 //
 //
 //
@@ -245,26 +206,28 @@ async function fetchWordList() {
 }
 //
 //
+// Function to send a message to the popup with jsonData
+function sendMessageToPopup(data) {
+  // console.log("Sending data to popup:", data);
+  chrome.runtime.sendMessage({ message: "show_data", data: data });
+}
 //
 // Calling The Cloud Function
-function callCloudFunction() {
+function callCloudFunction(allPageText) {
   console.log("Function Called...\n");
   const cloudFunctionUrl =
     "https://asia-southeast1-sincere-blade-404218.cloudfunctions.net/eula-analyzer-public";
 
-  // Replace this with the actual user input
-  // const userInput = "Tell me a joke about moon.";
-
   return fetch(cloudFunctionUrl, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "text/plain",
     },
-    // mode: "no-cors", // Uncomment this line if your Cloud Function supports CORS
-    body: JSON.stringify({
-      userMessage: privacyParagraph,
-      // Add other parameters if needed
-    }),
+    // body: "It is a security sentence. My Name is OLI.",
+    body: allPageText, // Send the plaintext directly
+    // body: JSON.stringify({
+    //   userMessage: userOliMessage,
+    // }),
   })
     .then((response) => {
       // Check if the response status is OK (200)
@@ -292,10 +255,10 @@ function callCloudFunction() {
     });
 }
 
-// Function to send a message to the popup with jsonData
-function sendMessageToPopup(data) {
-  // console.log("Sending data to popup:", data);
-  chrome.runtime.sendMessage({ message: "show_data", data: data });
+// Define a callback function to be called when highlighting is complete
+function highlightingCallback() {
+  // Send a message to the popup after highlighting is complete
+  sendMessageToPopup(jsonData);
 }
 
 //#####---Function for Highlighting The Privacy Sensitive Words---#####---------------------------------------------------------------
@@ -323,14 +286,13 @@ async function highlightWords() {
     }
   });
 
-  privacyParagraph = extractSentencesWithPrivacyWords(
-    allPageText,
-    predefinedWords
-  );
-
-  // Call the function to generate warnings
-  // await callCloudFunction();
-  sendMessageToPopup(jsonData);
+  try {
+    // Call the Cloud Function and wait for the response
+    await callCloudFunction(allPageText);
+  } catch (error) {
+    // Handle errors
+    console.error("Error processing data:", error);
+  }
 }
 //---------------------------------------------------Ending---of---Function-----------------------------------------------------------
 //
@@ -339,10 +301,8 @@ async function highlightWords() {
 // Message listener to trigger highlighting and send jsonData when a message is received
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "highlight_words") {
-    highlightWords();
-    // callCloudFunction();
-    // sendMessageToPopup(jsonData);
-    // sendMessageToPopup(jsonData);
+    highlightWords().then(highlightingCallback);
+
     return true;
   }
 });

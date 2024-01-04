@@ -2,12 +2,24 @@
 function updatePopupWithData(jsonData) {
   const dataContainer = document.getElementById("data-container");
   for (const warning of jsonData.warnings) {
+    // Create a bold element for the Warning Category
     const categoryElement = document.createElement("b");
     categoryElement.textContent = warning.category;
 
+    // Use chrome.runtime.getURL to get the fully qualified URL for the icon
+    const iconUrl = chrome.runtime.getURL(`icons/${warning.icon_tag}.png`);
+    // Create an img element for the icon
+    const iconElement = document.createElement("img");
+    iconElement.src = iconUrl;
+    iconElement.alt = `${warning.icon_tag} icon`;
+    iconElement.className = "icon";
+
+    // Create a paragraph element for the Warning Description
     const descriptionElement = document.createElement("p");
     descriptionElement.textContent = warning.description;
 
+    // Append the icon and text to the data container
+    dataContainer.appendChild(iconElement);
     dataContainer.appendChild(categoryElement);
     dataContainer.appendChild(descriptionElement);
   }
@@ -39,6 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /////// new ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // Function to update the popup with received jsonData
+// function updatePopupWithData(jsonData) {
+//   const dataContainer = document.getElementById("data-container");
+//   for (const warning of jsonData.warnings) {
+//     const categoryElement = document.createElement("b");
+//     categoryElement.textContent = warning.category;
+
+//     const descriptionElement = document.createElement("p");
+//     descriptionElement.textContent = warning.description;
+
+//     dataContainer.appendChild(categoryElement);
+//     dataContainer.appendChild(descriptionElement);
+//   }
+// }
 
 // // Function to update the popup with received jsonData
 // function updatePopupWithData(jsonData) {
