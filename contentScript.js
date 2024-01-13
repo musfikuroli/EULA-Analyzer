@@ -1,46 +1,90 @@
 // let jsonData = {};
 
+// let jsonData = {
+//   warnings: [
+//     {
+//       warning_number: 1,
+//       category: "Online Services",
+//       icon_tag: "third-party-services",
+//       description:
+//         "This Product requires an internet connection and may have online services and features that collect and store data about you. Make sure to review the privacy policy for more information on how your data is used and protected.",
+//     },
+//     {
+//       warning_number: 2,
+//       category: "Data Collection",
+//       icon_tag: "data-collection",
+//       description:
+//         "Ubisoft may collect and store data about you in relation to your use of the Product, such as your connection information and compatible device data. Your privacy is important to Ubisoft, but be cautious and review their privacy policy to understand how your data is handled.",
+//     },
+//     {
+//       warning_number: 3,
+//       category: "Third-party Analytics",
+//       icon_tag: "data-usage-analytics",
+//       description:
+//         "Ubisoft uses third-party analytics tools to collect information about your gaming habits and use of the Product. This may include personal data such as your device identifiers and settings, game scores, and feature usage. Make sure you review their privacy policy for more details.",
+//     },
+//     {
+//       warning_number: 4,
+//       category: "Targeted Advertising",
+//       icon_tag: "behavioral-advertising",
+//       description:
+//         "The Product may display advertisements and collect information for targeted advertising purposes. This may include data such as your age, gender, and the ads you interact with. Read Ubisoft's privacy policy to understand how this information is used and how to opt-out.",
+//     },
+//     {
+//       warning_number: 5,
+//       category: "Unauthorized Program Detection",
+//       icon_tag: "access-control",
+//       description:
+//         "The Product may monitor your hardware for unauthorized third-party programs. If detected, information about the program and your account may be sent to Ubisoft. Your access to the Product may be terminated based on the detection results.",
+//     },
+//   ],
+// };
+
 let jsonData = {
+  eula_severity_rating: [
+    {
+      overall_severity_of_the_eula: "Medium",
+      severity_safety_rating: "80%",
+    },
+  ],
   warnings: [
     {
       warning_number: 1,
-      category: "Online Services",
-      icon_tag: "missing-oli",
+      category: "Third-party Sharing",
+      icon_tag: "third-party-sharing",
+      severity_indicator: "red",
       description:
-        "This Product requires an internet connection and may have online services and features that collect and store data about you. Make sure to review the privacy policy for more information on how your data is used and protected.",
+        "This application shares user data with third-party entities. Understand the purposes of such sharing, the entities involved, and review the privacy policy to ensure your data is handled responsibly and securely.",
     },
     {
       warning_number: 2,
-      category: "Data Collection",
-      icon_tag: "data-collection",
+      category: "Data Usage Analytics",
+      icon_tag: "data-usage-analytics",
+      severity_indicator: "yellow",
       description:
-        "Ubisoft may collect and store data about you in relation to your use of the Product, such as your connection information and compatible device data. Your privacy is important to Ubisoft, but be cautious and review their privacy policy to understand how your data is handled.",
+        "The application collects and analyzes user data for the purpose of improving its products and services. Review the privacy policy to understand the types of data collected and how it is used.",
     },
     {
       warning_number: 3,
-      category: "Third-party Analytics",
-      icon_tag: "data-usage-analytics",
+      category: "Personal Data Access",
+      icon_tag: "personal-data-access",
+      severity_indicator: "red",
       description:
-        "Ubisoft uses third-party analytics tools to collect information about your gaming habits and use of the Product. This may include personal data such as your device identifiers and settings, game scores, and feature usage. Make sure you review their privacy policy for more details.",
+        "This application has the capability to access a wide range of personal data, including images, SMS messages, and other sensitive information stored on the device. Exercise caution and review the privacy settings before granting access.",
     },
     {
       warning_number: 4,
-      category: "Targeted Advertising",
-      icon_tag: "behavioral-advertising",
+      category: "Terms of Service",
+      icon_tag: "terms-of-service",
+      severity_indicator: "green",
       description:
-        "The Product may display advertisements and collect information for targeted advertising purposes. This may include data such as your age, gender, and the ads you interact with. Read Ubisoft's privacy policy to understand how this information is used and how to opt-out.",
-    },
-    {
-      warning_number: 5,
-      category: "Unauthorized Program Detection",
-      icon_tag: "access-control",
-      description:
-        "The Product may monitor your hardware for unauthorized third-party programs. If detected, information about the program and your account may be sent to Ubisoft. Your access to the Product may be terminated based on the detection results.",
+        "By installing or using the Product, you agree to abide by the terms of service set forth by the developer. Review the terms of service to understand your rights and responsibilities while using the application.",
     },
   ],
 };
 
 //#####---Function to Extract All Text Content from The Page---#####--------------------------------------------------------------------
+
 function extractAllText() {
   const allText = [];
 
@@ -263,7 +307,7 @@ function highlightingCallback() {
   // Send a message to the popup after highlighting is complete
   setTimeout(function () {
     sendMessageToPopup(jsonData);
-  }, 10);
+  }, 5000);
   // sendMessageToPopup(jsonData);
 }
 //
@@ -295,13 +339,13 @@ async function highlightWords() {
     }
   });
 
-  // try {
-  //   // Call the Cloud Function and wait for the response
-  //   await callCloudFunction(allPageText);
-  // } catch (error) {
-  //   // Handle errors
-  //   console.error("Error processing data:", error);
-  // }
+  // Call the Cloud Function and wait for the response
+  try {
+    // await callCloudFunction(allPageText);
+  } catch (error) {
+    // Handle errors
+    console.error("Error processing data:", error);
+  }
 }
 //---------------------------------------------------Ending---of---Function-----------------------------------------------------------
 //
