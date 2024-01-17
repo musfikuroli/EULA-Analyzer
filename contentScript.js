@@ -1,4 +1,4 @@
-// let jsonData = {};
+let jsonData = {};
 
 // let jsonData = {
 //   warnings: [
@@ -40,48 +40,48 @@
 //   ],
 // };
 
-let jsonData = {
-  eula_severity_rating: [
-    {
-      overall_severity_of_the_eula: "Medium",
-      severity_safety_rating: "80%",
-    },
-  ],
-  warnings: [
-    {
-      warning_number: 1,
-      category: "Third-party Sharing",
-      icon_tag: "third-party-sharing",
-      severity_indicator: "red",
-      description:
-        "This application shares user data with third-party entities. Understand the purposes of such sharing, the entities involved, and review the privacy policy to ensure your data is handled responsibly and securely.",
-    },
-    {
-      warning_number: 2,
-      category: "Data Usage Analytics",
-      icon_tag: "data-usage-analytics",
-      severity_indicator: "yellow",
-      description:
-        "The application collects and analyzes user data for the purpose of improving its products and services. Review the privacy policy to understand the types of data collected and how it is used.",
-    },
-    {
-      warning_number: 3,
-      category: "Personal Data Access",
-      icon_tag: "personal-data-access",
-      severity_indicator: "red",
-      description:
-        "This application has the capability to access a wide range of personal data, including images, SMS messages, and other sensitive information stored on the device. Exercise caution and review the privacy settings before granting access.",
-    },
-    {
-      warning_number: 4,
-      category: "Terms of Service",
-      icon_tag: "terms-of-service",
-      severity_indicator: "green",
-      description:
-        "By installing or using the Product, you agree to abide by the terms of service set forth by the developer. Review the terms of service to understand your rights and responsibilities while using the application.",
-    },
-  ],
-};
+// let jsonData = {
+//   eula_severity_rating: [
+//     {
+//       overall_severity_of_the_eula: "Low",
+//       severity_safety_rating: "80%",
+//     },
+//   ],
+//   warnings: [
+//     {
+//       warning_number: 1,
+//       category: "Third-party Sharing",
+//       icon_tag: "third-party-sharing",
+//       severity_indicator: "red",
+//       description:
+//         "This application shares user data with third-party entities. Understand the purposes of such sharing, the entities involved, and review the privacy policy to ensure your data is handled responsibly and securely.",
+//     },
+//     {
+//       warning_number: 2,
+//       category: "Data Usage Analytics",
+//       icon_tag: "data-usage-analytics",
+//       severity_indicator: "yellow",
+//       description:
+//         "The application collects and analyzes user data for the purpose of improving its products and services. Review the privacy policy to understand the types of data collected and how it is used.",
+//     },
+//     {
+//       warning_number: 3,
+//       category: "Personal Data Access",
+//       icon_tag: "personal-data-access",
+//       severity_indicator: "red",
+//       description:
+//         "This application has the capability to access a wide range of personal data, including images, SMS messages, and other sensitive information stored on the device. Exercise caution and review the privacy settings before granting access.",
+//     },
+//     {
+//       warning_number: 4,
+//       category: "Terms of Service",
+//       icon_tag: "terms-of-service",
+//       severity_indicator: "green",
+//       description:
+//         "By installing or using the Product, you agree to abide by the terms of service set forth by the developer. Review the terms of service to understand your rights and responsibilities while using the application.",
+//     },
+//   ],
+// };
 
 //#####---Function to Extract All Text Content from The Page---#####--------------------------------------------------------------------
 
@@ -305,10 +305,10 @@ function callCloudFunction(allPageText) {
 // Define a callback function to be called when highlighting is complete
 function highlightingCallback() {
   // Send a message to the popup after highlighting is complete
-  setTimeout(function () {
-    sendMessageToPopup(jsonData);
-  }, 5000);
-  // sendMessageToPopup(jsonData);
+  // setTimeout(function () {
+  //   sendMessageToPopup(jsonData);
+  // }, 5000);
+  sendMessageToPopup(jsonData);
 }
 //
 //
@@ -341,7 +341,7 @@ async function highlightWords() {
 
   // Call the Cloud Function and wait for the response
   try {
-    // await callCloudFunction(allPageText);
+    await callCloudFunction(allPageText);
   } catch (error) {
     // Handle errors
     console.error("Error processing data:", error);

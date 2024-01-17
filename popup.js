@@ -123,7 +123,7 @@ function displayEulaSeverityRating(eulaSeverityRating) {
   }
 
   // Set the inner HTML with the colored value and class for span
-  overallSeverityElement.innerHTML = `<b>Severity of EULA:</b> <span class="severity-value" style="color: ${overallSeverityColor};">${overallSeverityValue}</span>`;
+  overallSeverityElement.innerHTML = `<b>Severity:</b> <span class="severity-value" style="color: ${overallSeverityColor};">${overallSeverityValue}</span>`;
 
   // Set The EULA Safety Rating. Example: 80%
   const safetyRatingElement = document.createElement("p");
